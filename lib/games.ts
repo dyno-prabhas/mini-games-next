@@ -1,0 +1,77 @@
+export const games = [
+  {
+    id: "tic_tac_toe",
+    name: "Tic-Tac-Toe",
+    shortDescription: "Classic 3x3 grid game",
+    description: "A simple strategy game for two players, X and O, who take turns marking the spaces in a 3x3 grid.",
+    howToPlay: "Click on an empty cell to place your mark. Get three in a row to win!",
+    image: "/tic-tac-toe.png",
+  },
+  {
+    id: "snake",
+    name: "Snake",
+    shortDescription: "Grow your snake by eating food",
+    description: "Control a snake to eat food and grow longer, but be careful not to hit the walls or yourself!",
+    howToPlay:
+      "Use arrow keys to change direction. Eat food to grow and earn points. Avoid hitting walls or your own tail.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "memory_card",
+    name: "Memory Card",
+    shortDescription: "Test your memory skills",
+    description: "Flip cards to find matching pairs in this classic memory game.",
+    howToPlay:
+      "Click on cards to flip them. Find all matching pairs to win. Remember card positions to make matches quickly!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "guess_the_number",
+    name: "Guess The Number",
+    shortDescription: "Navigate through pipes",
+    description: "Guide a bird through a series of pipes without touching them.",
+    howToPlay: "Click or tap to make the bird flap its wings and gain height. Avoid hitting pipes or the ground.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "flappy_bird",
+    name: "FlappyBird",
+    shortDescription: "Navigate through pipes",
+    description: "Guide a bird through a series of pipes without touching them.",
+    howToPlay: "Click or tap to make the bird flap its wings and gain height. Avoid hitting pipes or the ground.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "ping-pong",
+    name: "Ping Pong",
+    shortDescription: "Classic table tennis game",
+    description: "Play table tennis against an AI opponent or a friend.",
+    howToPlay: "Use your paddle to hit the ball past your opponent. First to 11 points wins!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "minesweeper",
+    name: "Minesweeper",
+    shortDescription: "Clear the minefield",
+    description: "Clear a minefield without detonating any mines in this classic puzzle game.",
+    howToPlay: "Click to reveal cells. Numbers show how many mines are adjacent. Right-click to flag potential mines.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "rock_paper_scissors",
+    name: "Rock Paper Scissors",
+    shortDescription: "Classic hand game",
+    description: "Play the classic game of Rock Paper Scissors against the computer.",
+    howToPlay: "Choose rock, paper, or scissors. Rock beats scissors, scissors beats paper, paper beats rock.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "racing",
+    name: "Racing Game",
+    shortDescription: "Simple car racing game",
+    description: "Race against time in this simple top-down racing game.",
+    howToPlay: "Use arrow keys to steer your car. Avoid obstacles and reach the finish line as fast as you can!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+]
+

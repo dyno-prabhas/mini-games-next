@@ -1,0 +1,417 @@
+///// Guess the Number
+
+export const games = [
+  {
+    id: "tic-tac-toe",
+    name: "Tic-Tac-Toe",
+    shortDescription: "Classic 3x3 grid game",
+    description: "A simple strategy game for two players, X and O, who take turns marking the spaces in a 3x3 grid.",
+    howToPlay: "Click on an empty cell to place your mark. Get three in a row to win!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "snake",
+    name: "Snake",
+    shortDescription: "Grow your snake by eating food",
+    description: "Control a snake to eat food and grow longer, but be careful not to hit the walls or yourself!",
+    howToPlay:
+      "Use arrow keys to change direction. Eat food to grow and earn points. Avoid hitting walls or your own tail.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "memory-card",
+    name: "Memory Card",
+    shortDescription: "Test your memory skills",
+    description: "Flip cards to find matching pairs in this classic memory game.",
+    howToPlay:
+      "Click on cards to flip them. Find all matching pairs to win. Remember card positions to make matches quickly!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "flappy-bird",
+    name: "Flappy Bird",
+    shortDescription: "Navigate through pipes",
+    description: "Guide a bird through a series of pipes without touching them.",
+    howToPlay: "Click or tap to make the bird flap its wings and gain height. Avoid hitting pipes or the ground.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "ping-pong",
+    name: "Ping Pong",
+    shortDescription: "Classic table tennis game",
+    description: "Play table tennis against an AI opponent or a friend.",
+    howToPlay: "Use your paddle to hit the ball past your opponent. First to 11 points wins!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "minesweeper",
+    name: "Minesweeper",
+    shortDescription: "Clear the minefield",
+    description: "Clear a minefield without detonating any mines in this classic puzzle game.",
+    howToPlay: "Click to reveal cells. Numbers show how many mines are adjacent. Right-click to flag potential mines.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "rock-paper-scissors",
+    name: "Rock Paper Scissors",
+    shortDescription: "Classic hand game",
+    description: "Play the classic game of Rock Paper Scissors against the computer.",
+    howToPlay: "Choose rock, paper, or scissors. Rock beats scissors, scissors beats paper, paper beats rock.",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    id: "racing",
+    name: "Racing Game",
+    shortDescription: "Simple car racing game",
+    description: "Race against time in this simple top-down racing game.",
+    howToPlay: "Use arrow keys to steer your car. Avoid obstacles and reach the finish line as fast as you can!",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+]
+
+
+///// Memory Card 
+
+"use client"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+
+const CARD_PAIRS = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"]
+
+interface CardType {
+  id: number
+  emoji: string
+  flipped: boolean
+  matched: boolean
+}
+
+export default function MemoryCardGame() {
+  const [cards, setCards] = useState<CardType[]>([])
+  const [flippedCards, setFlippedCards] = useState<number[]>([])
+  const [moves, setMoves] = useState(0)
+  const [gameOver, setGameOver] = useState(false)
+
+  useEffect(() => {
+    initializeGame()
+  }, [])
+
+  const initializeGame = () => {
+    const shuffledCards = [...CARD_PAIRS, ...CARD_PAIRS]
+      .sort(() => Math.random() - 0.5)
+      .map((emoji, index) => ({
+        id: index,
+        emoji,
+        flipped: false,
+        matched: false,
+      }))
+    setCards(shuffledCards)
+    setFlippedCards([])
+    setMoves(0)
+    setGameOver(false)
+  }
+
+  const handleCardClick = (id: number) => {
+    if (flippedCards.length === 2 || cards[id].flipped || cards[id].matched) return
+
+    const newCards = [...cards]
+    newCards[id].flipped = true
+    setCards(newCards)
+
+    const newFlippedCards = [...flippedCards, id]
+    setFlippedCards(newFlippedCards)
+
+    if (newFlippedCards.length === 2) {
+      setMoves(moves + 1)
+      checkForMatch(newFlippedCards)
+    }
+  }
+
+  const checkForMatch = (flippedCardIds: number[]) => {
+    const [firstCardId, secondCardId] = flippedCardIds
+    if (cards[firstCardId].emoji === cards[secondCardId].emoji) {
+      const newCards = [...cards]
+      newCards[firstCardId].matched = true
+      newCards[secondCardId].matched = true
+      setCards(newCards)
+      setFlippedCards([])
+
+      if (newCards.every((card) => card.matched)) {
+        setGameOver(true)
+      }
+    } else {
+      setTimeout(() => {
+        const newCards = [...cards]
+        newCards[firstCardId].flipped = false
+        newCards[secondCardId].flipped = false
+        setCards(newCards)
+        setFlippedCards([])
+      }, 1000)
+    }
+  }
+
+  return (
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardContent className="p-6">
+        <h2 className="text-2xl font-bold mb-4">Memory Card Game</h2>
+        <div className="mb-4">Moves: {moves}</div>
+        <div className="grid grid-cols-4 gap-4">
+          {cards.map((card) => (
+            <Button
+              key={card.id}
+              onClick={() => handleCardClick(card.id)}
+              className="h-24 text-4xl"
+              variant={card.flipped || card.matched ? "default" : "outline"}
+            >
+              {card.flipped || card.matched ? card.emoji : "?"}
+            </Button>
+          ))}
+        </div>
+        {gameOver && (
+          <div className="mt-4">
+            <p>Congratulations! You completed the game in {moves} moves.</p>
+            <Button onClick={initializeGame} className="mt-2">
+              Play Again
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+
+////  Snake Game
+
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+const GRID_SIZE = 20
+const CELL_SIZE = 20
+const INITIAL_SNAKE = [{ x: 10, y: 10 }]
+const INITIAL_DIRECTION = { x: 1, y: 0 }
+const INITIAL_FOOD = { x: 15, y: 15 }
+
+export default function SnakeGame() {
+  const [snake, setSnake] = useState(INITIAL_SNAKE)
+  const [direction, setDirection] = useState(INITIAL_DIRECTION)
+  const [food, setFood] = useState(INITIAL_FOOD)
+  const [gameOver, setGameOver] = useState(false)
+  const [score, setScore] = useState(0)
+
+  const moveSnake = useCallback(() => {
+    if (gameOver) return
+
+    const newSnake = [...snake]
+    const head = { ...newSnake[0] }
+
+    head.x += direction.x
+    head.y += direction.y
+
+    if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+      setGameOver(true)
+      return
+    }
+
+    if (newSnake.some((segment) => segment.x === head.x && segment.y === head.y)) {
+      setGameOver(true)
+      return
+    }
+
+    newSnake.unshift(head)
+
+    if (head.x === food.x && head.y === food.y) {
+      setScore((prevScore) => prevScore + 1)
+      setFood({
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE),
+      })
+    } else {
+      newSnake.pop()
+    }
+
+    setSnake(newSnake)
+  }, [snake, direction, food, gameOver])
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowUp":
+          setDirection({ x: 0, y: -1 })
+          break
+        case "ArrowDown":
+          setDirection({ x: 0, y: 1 })
+          break
+        case "ArrowLeft":
+          setDirection({ x: -1, y: 0 })
+          break
+        case "ArrowRight":
+          setDirection({ x: 1, y: 0 })
+          break
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyPress)
+
+    const gameLoop = setInterval(moveSnake, 100)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress)
+      clearInterval(gameLoop)
+    }
+  }, [moveSnake])
+
+  const resetGame = () => {
+    setSnake(INITIAL_SNAKE)
+    setDirection(INITIAL_DIRECTION)
+    setFood(INITIAL_FOOD)
+    setGameOver(false)
+    setScore(0)
+  }
+
+  return (
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>Snake Game</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="mb-4">Score: {score}</div>
+        <div
+          style={{
+            width: GRID_SIZE * CELL_SIZE,
+            height: GRID_SIZE * CELL_SIZE,
+            position: "relative",
+            border: "1px solid #ccc",
+          }}
+        >
+          {snake.map((segment, index) => (
+            <div
+              key={index}
+              style={{
+                position: "absolute",
+                left: segment.x * CELL_SIZE,
+                top: segment.y * CELL_SIZE,
+                width: CELL_SIZE,
+                height: CELL_SIZE,
+                backgroundColor: "green",
+              }}
+            />
+          ))}
+          <div
+            style={{
+              position: "absolute",
+              left: food.x * CELL_SIZE,
+              top: food.y * CELL_SIZE,
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+              backgroundColor: "red",
+              borderRadius: "50%",
+            }}
+          />
+        </div>
+        {gameOver && (
+          <div className="mt-4">
+            <p>Game Over! Your score: {score}</p>
+            <Button onClick={resetGame} className="mt-2">
+              Play Again
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+
+
+////// Tic Tac Toe
+
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+
+type Player = "X" | "O" | null
+
+export default function TicTacToe() {
+  const [board, setBoard] = useState<Player[]>(Array(9).fill(null))
+  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
+  const [winner, setWinner] = useState<Player>(null)
+
+  const checkWinner = (squares: Player[]): Player => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ]
+
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i]
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a]
+      }
+    }
+
+    return null
+  }
+
+  const handleClick = (index: number) => {
+    if (board[index] || winner) return
+
+    const newBoard = [...board]
+    newBoard[index] = currentPlayer
+    setBoard(newBoard)
+
+    const newWinner = checkWinner(newBoard)
+    if (newWinner) {
+      setWinner(newWinner)
+    } else {
+      setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
+    }
+  }
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setCurrentPlayer("X")
+    setWinner(null)
+  }
+
+  const renderSquare = (index: number) => (
+    <Button onClick={() => handleClick(index)} className="h-24 text-4xl" variant={board[index] ? "default" : "outline"}>
+      {board[index]}
+    </Button>
+  )
+
+  return (
+    <Card className="w-full max-w-md mx-auto">
+      <CardContent className="p-6">
+        <h2 className="text-2xl font-bold mb-4">Tic-Tac-Toe</h2>
+        <div className="grid grid-cols-3 gap-2 mb-4">{board.map((_, index) => renderSquare(index))}</div>
+        {winner ? (
+          <div>
+            <p className="text-xl font-bold mb-2">Winner: {winner}</p>
+            <Button onClick={resetGame}>Play Again</Button>
+          </div>
+        ) : board.every(Boolean) ? (
+          <div>
+            <p className="text-xl font-bold mb-2">It's a draw!</p>
+            <Button onClick={resetGame}>Play Again</Button>
+          </div>
+        ) : (
+          <p className="text-xl">Current player: {currentPlayer}</p>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
