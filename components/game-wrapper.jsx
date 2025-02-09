@@ -9,7 +9,7 @@ import GuessTheNumber from "./games/guess-the-number"
 import Minesweeper from "./games/minesweeper"
 import FlappyBird from "./games/flappy-bird"
 import RockPaperScissors from "./games/rock-paper-scissor"
-
+import PingPong from "./games/pong-game"
 
 export default function GameWrapper({ gameId }) {
   const [highScore, setHighScore] = useLocalStorage(`highscore-${gameId}`, 0)
@@ -38,6 +38,7 @@ export default function GameWrapper({ gameId }) {
     minesweeper: Minesweeper,
     flappy_bird: FlappyBird,
     rock_paper_scissors: RockPaperScissors,
+    ping_pong: PingPong,
   }
 
   const GameComponent = games[gameId];

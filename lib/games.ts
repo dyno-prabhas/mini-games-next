@@ -42,7 +42,7 @@ export const games = [
     image: "/placeholder.svg?height=200&width=300",
   },
   {
-    id: "ping-pong",
+    id: "ping_pong",
     name: "Ping Pong",
     shortDescription: "Classic table tennis game",
     description: "Play table tennis against an AI opponent or a friend.",
